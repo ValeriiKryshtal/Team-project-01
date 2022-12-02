@@ -7,14 +7,14 @@ $(document).ready(function(){
      $('#main-container')
      $('#search')
      $('#submit-btn').on('click', function(){
-          console.log('yeah!!')   
-          const input = $('#input');
-          const inputValue = input[0].value;
-          $('#input').val("");//clean input space         
-          console.log(inputValue);
-          currecncyExchangeRate(inputValue);
-          wikipediaBlurb(inputValue);
-     })
+               console.log('yeah!!')   
+               const input = $('#input');
+               const inputValue = input[0].value;
+               $('#input').val("");//clean input space         
+               console.log(inputValue);
+               currecncyExchangeRate(inputValue);
+               wikipediaBlurb(inputValue);
+          })
      $('#content')
      $('#country-name')
      $('#history')
