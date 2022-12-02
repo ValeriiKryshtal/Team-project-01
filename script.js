@@ -20,6 +20,16 @@ $(document).ready(function(){
      $('#history')
      $('#currency')
 
+     //Calendar
+     function displayTime(){
+          var reformatDate = dayjs().format('dddd, MMMM D YYYY, h:mm:ss a');
+          $('#calendar-holder').text(reformatDate);
+          setTimeout(displayTime,1000);
+     }
+     displayTime()
+     //calendar end
+
+     displayTime()
      // CURRENCY EXCHANGE RATE
      function currecncyExchangeRate(input){
      //call restcountries.com api
