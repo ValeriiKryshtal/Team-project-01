@@ -37,6 +37,7 @@ $(document).ready(function(){
           searchHistoryListEl.innerHTML = "";
           historyListUpdate()
           $('#input').val("");//clean input space 
+          weather.fetchWeather(inputValue)
      })
      
      //Calendar
@@ -171,3 +172,44 @@ $(document).ready(function(){
      // on window load, call country data of last search or default country
      window.onload = searches[4]? callCountryData(searches[4]):callCountryData("canada"); // <---- default country to load, keep commented unless testing or deploying to avoid API call limit
 })
+
+     //The weather widget
+let weather = {
+     "apiKey": "40cd60c50feeb35b6cb5749e49f6c7bf",
+     fetchWeather: function(country){
+          fetch("https://api.openweathermap.org/data/2.5/forecast?q=" 
+               + country
+               + "&units=metric&appid=" 
+               + this.apiKey
+          )
+               .then((response) => response.json())
+               .then((data) => this.displayWeather(data))
+},
+displayWeather: function(data){
+      
+     console.log(data);           
+              
+     const { name } = data.city;
+     const { icon, description } = data.list[0].weather[0];
+     const { temp, humidity } = data.list[0].main;
+     const { speed } = data.list[0].wind;
+     console.log(name,icon,description,temp,humidity,speed);
+     document.querySelector(".capital-name").innerText = "Weather in " + name;
+     document.querySelector(".icon").src = "https://openweathermap.org/img/wn/" + icon + "@2x.png";
+     document.querySelector(".description").innerText = description;
+     document.querySelector(".temp").innerText = temp + "°C";
+     document.querySelector(".humidity").innerText = "Humidity: " + humidity + "%";
+     document.querySelector(".wind").innerText = "Wind speed: " + speed +  " km/h";
+     document.querySelector(".weather").classList.remove("loading");
+     document.body.style.backgroundImage = "url('https://source.unsplash.com/1600x900/?" + name + "')"
+},
+search: function () {
+     this.fetchWeather(document.querySelector(".search-bar").value);
+}
+}
+      
+//  document.querySelector(".search button").addEventListener("click", function(){
+//      weather.search();
+//  });
+      
+weather.fetchWeather("Ottawa", "CA");
