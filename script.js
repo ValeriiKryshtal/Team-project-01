@@ -175,9 +175,11 @@ $(document).ready(function(){
 
      //The weather widget
 let weather = {
-     "apiKey": "40cd60c50feeb35b6cb5749e49f6c7bf",
-     fetchWeather: function(country){
-          fetch("https://api.openweathermap.org/data/2.5/forecast?q=" 
+     "apiKey": "40cd60c50feeb35b6cb5749e49f6c7bf", 
+     fetchWeather: function(city,country){
+          fetch("https://api.openweathermap.org/data/2.5/forecast?q=" //API link to get country information
+               + city 
+               + ","
                + country
                + "&units=metric&appid=" 
                + this.apiKey
@@ -189,27 +191,22 @@ displayWeather: function(data){
       
      console.log(data);           
               
-     const { name } = data.city;
-     const { icon, description } = data.list[0].weather[0];
-     const { temp, humidity } = data.list[0].main;
-     const { speed } = data.list[0].wind;
-     console.log(name,icon,description,temp,humidity,speed);
-     document.querySelector(".capital-name").innerText = "Weather in " + name;
+     const { name } = data.city; // the cities name to weather
+     const { icon, description } = data.list[0].weather[0]; //JSON data for icon & description
+     const { temp, humidity } = data.list[0].main; //JSON data for temp & humidity
+     const { speed } = data.list[0].wind; //JSON data for winds speed
+     console.log(name,icon,description,temp,humidity,speed); 
+     document.querySelector(".capital-name").innerText = "Weather in " + name; // add data to the markup
      document.querySelector(".icon").src = "https://openweathermap.org/img/wn/" + icon + "@2x.png";
      document.querySelector(".description").innerText = description;
      document.querySelector(".temp").innerText = temp + "°C";
      document.querySelector(".humidity").innerText = "Humidity: " + humidity + "%";
      document.querySelector(".wind").innerText = "Wind speed: " + speed +  " km/h";
-     document.querySelector(".weather").classList.remove("loading");
-     document.body.style.backgroundImage = "url('https://source.unsplash.com/1600x1600/?" + name + "')"
+     document.body.style.backgroundImage = "url('https://source.unsplash.com/1600x1600/?" + name + "')" // Adding a background to a body element
 },
 search: function () {
      this.fetchWeather(document.querySelector(".search-bar").value);
 }
 }
-      
-//  document.querySelector(".search button").addEventListener("click", function(){
-//      weather.search();
-//  });
       
 weather.fetchWeather("Ottawa", "CA");
