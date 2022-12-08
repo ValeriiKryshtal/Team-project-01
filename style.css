@@ -5,23 +5,30 @@ body {
      /* border: 5px solid red;  */
      display: flex;
      flex-direction: column;
-     background-color: rgb(180, 175, 247);
+     background: #7c7c7cb2;
 }
 #map {
-     height: 200px;
      width: 500px; 
-     border: 5px solid rgba(109, 199, 194, 0.904); 
+     border: none; 
      border-radius: 10px;
+     padding: 2em;
+     width: 100%;
+     margin: 15px;
 }
-#weather {
-     height: 200px;
+.weather {
      width: 500px; 
-     border: 5px solid rgba(109, 199, 194, 0.904); 
+     border: none; 
      border-radius: 10px;
+     background:  #7c7c7cb2;
+     color: white;
+     padding: 2em;
+     width: 100%;
+     margin: 15px;
 }
 #history {
-     background-color: rgba(143, 33, 245, 0.384);
-     border: 3px solid rgb(132, 10, 247);
+     background: #7c7c7cb2;
+     border: none;
+     border-radius: 10px;
      margin: 1%;
      padding: 2%;
 }
@@ -34,7 +41,11 @@ body {
      width: 70%;
      margin-right: 3%;
      margin-left: 1%;
-     /* border: 3px solid orange;  */
+     border: none;
+     background: #000000d0;
+     color: white;
+     border-radius: 7px;
+     padding: 30px;
 }
 #search {
      width: 200px;
@@ -70,8 +81,9 @@ body {
 #calendar-holder {
      display: flex;
      justify-content: center;
-     border: 5px solid rgba(109, 199, 194, 0.904);
-     background-color: rgba(154, 247, 242, 0.904);
+     border: none;
+     background-color:  #000000d0;
+     color: white;
      border-radius: 15px;
      width: 190px;
      margin-left: auto;
@@ -88,8 +100,9 @@ body {
 }
 
 #currency {
-     background-color: rgba(143, 33, 245, 0.384);
-     border: 3px solid rgb(132, 10, 247) !important;
+     background: #7c7c7cb2;
+     border: none;
+     border-radius: 10px;
      margin: 1%;
      padding: 2%;
      
@@ -107,30 +120,33 @@ body {
      /* padding-right: 5%; */
      width: 95%; 
      border-radius: 7px;
-     border: 1px solid rgba(109, 199, 194, 0.904); 
-     background-color: rgba(154, 247, 242, 0.904);
+     border: none; 
+     background-color: #7c7c7cb2;
+     color: white;
 }
 #mapWeatherContainer {
      display: flex;
      flex-direction: row;
      justify-content: space-evenly;
-     /* border: 5px solid greenyellow; */
+     margin: 15px;
 }
 footer {
      text-align: center;
      font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
      margin: 5%;
 }
-#capital-name {
-     background-color: rgba(143, 33, 245, 0.384);
-     border: 3px solid rgb(132, 10, 247);
+.capital-name {
+     background:  #7c7c7cb2;
+     color:  white;
+     border: none;
      border-radius: 7px;
      margin: 1%;
      padding: 2%;
 }
 #submit-btn {
-     border: 1px solid rgba(109, 199, 194, 0.904); 
-     background-color: rgba(154, 247, 242, 0.904);
+     border: none; 
+     background-color: #000000d0;
+     color: white;
 }
 
 /* When screen is too small, content shuffles under search */
