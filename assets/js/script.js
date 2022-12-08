@@ -1,45 +1,67 @@
 $(document).ready(function(){
      const searches = JSON.parse(window.localStorage.getItem("search")) || [];
-     var searchHistoryListEl=document.querySelector('#previos-search');
-     console.log(searches)
+     var searchHistoryListEl=document.querySelector('#previous-search');
+
      function historyListUpdate() {
+
+          if (searches.length!==0){
+               $('.clearBtn').attr("style","display:block");
+          } 
+          else if (searches.length===0){
+               $('.clearBtn').attr("style","display:none");
+          }
+
           for (let i =0; i<searches.length; i++){
                searches.length > 5? searches.shift() : searches;// if there are more than 5 searches, remove the oldest one
-               const newPreviosSearch = `<button id="eachPreviousSearch${i}" class="eachPreviousSearch">${searches[i]}</button>`
-               $('#previos-search').prepend(newPreviosSearch);
+
+               //when click history list, will show country
+               const newPreviousSearch = `<button id="eachPreviousSearch${i}" class="eachPreviousSearch">${searches[i]}</button>`
+               $('#previous-search').prepend(newPreviousSearch); 
                $(`#eachPreviousSearch${i}`).on('click', function() {
-                    $('#previos-search').prepend(newPreviosSearch);
-                    inputValue = searches[i]
-                    callCountryData(inputValue)
-                    var newSearch = inputValue;
-                    searches.push(newSearch);
-                    window.localStorage.setItem("search", JSON.stringify(searches));
-                    location. reload();
+                    callCountryData(searches[i])
                }) 
           } 
      }
      historyListUpdate();
 
-
-
      var latitude = 45.42;
      var longtitude = -75.7;
+     var inputValue;
+     var countries = ["Afghanistan","Albania","Algeria","Andorra","Angola","Anguilla","Antigua & Barbuda","Argentina","Armenia","Aruba","Australia","Austria","Azerbaijan","Bahamas","Bahrain","Bangladesh","Barbados","Belarus","Belgium","Belize","Benin","Bermuda","Bhutan","Bolivia","Bosnia & Herzegovina","Botswana","Brazil","British Virgin Islands","Brunei","Bulgaria","Burkina Faso","Burundi","Cambodia","Cameroon","Canada","Cape Verde","Cayman Islands","Central African Republic","Chad","Chile","China","Colombia","Congo","Cook Islands","Costa Rica","Cote D Ivoire","Croatia","Cuba","Curacao","Cyprus","Czech Republic","Denmark","Djibouti","Dominica","Dominican Republic","Ecuador","Egypt","El Salvador","Equatorial Guinea","Eritrea","Estonia","Ethiopia","Falkland Islands","Faroe Islands","Fiji","Finland","France","French Polynesia","French West Indies","Gabon","Gambia","Georgia","Germany","Ghana","Gibraltar","Greece","Greenland","Grenada","Guam","Guatemala","Guernsey","Guinea","Guinea Bissau","Guyana","Haiti","Honduras","Hong Kong","Hungary","Iceland","India","Indonesia","Iran","Iraq","Ireland","Isle Of Man","Israel","Italy","Jamaica","Japan","Jersey","Jordan","Kazakhstan","Kenya","Kiribati","Kosovo","Kuwait","Kyrgyzstan","Laos","Latvia","Lebanon","Lesotho","Liberia","Libya","Liechtenstein","Lithuania","Luxembourg","Macau","Macedonia","Madagascar","Malawi","Malaysia","Maldives","Mali","Malta","Marshall Islands","Mauritania","Mauritius","Mexico","Micronesia","Moldova","Monaco","Mongolia","Montenegro","Montserrat","Morocco","Mozambique","Myanmar","Namibia","Nauro","Nepal","Netherlands","Netherlands Antilles","New Caledonia","New Zealand","Nicaragua","Niger","Nigeria","North Korea","Norway","Oman","Pakistan","Palau","Palestine","Panama","Papua New Guinea","Paraguay","Peru","Philippines","Poland","Portugal","Puerto Rico","Qatar","Reunion","Romania","Russia","Rwanda","Saint Pierre & Miquelon","Samoa","San Marino","Sao Tome And Principe","Saudi Arabia","Senegal","Serbia","Seychelles","Sierra Leone","Singapore","Slovakia","Slovenia","Solomon Islands","Somalia","South Africa","South Korea","South Sudan","Spain","Sri Lanka","St Kitts & Nevis","St Lucia","St Vincent","Sudan","Suriname","Swaziland","Sweden","Switzerland","Syria","Taiwan","Tajikistan","Tanzania","Thailand","Timor L'este","Togo","Tonga","Trinidad & Tobago","Tunisia","Turkey","Turkmenistan","Turks & Caicos","Tuvalu","Uganda","Ukraine","United Arab Emirates","United Kingdom","United States","Uruguay","Uzbekistan","Vanuatu","Vatican City","Venezuela","Vietnam","Virgin Islands (Us)","Yemen","Zambia","Zimbabwe"];
+
      initMap();
+     // Button function for search
      $('#submit-btn').on('click', function(){
-          console.log('yeah!!')   
+          console.log('yeah!!')             
           const input = $('#input');
-          const inputValue = input[0].value;
-          callCountryData(inputValue);
-          var newSearch = inputValue;
-          searches.push(newSearch);
-          window.localStorage.setItem("search", JSON.stringify(searches));
-          console.log(inputValue);
-          searchHistoryListEl.innerHTML = "";
-          historyListUpdate()
+          inputValue = formatString(input[0].value);
           $('#input').val("");//clean input space 
-          weather.fetchWeather(inputValue)
+          //Counter check the input with countries list
+          if((jQuery.inArray(inputValue,countries)>-1)){               
+               callCountryData(inputValue);
+               if(!searches.includes(inputValue)){
+                    storeList();
+               }
+          } else {
+               $("#country-name").text("Please enter valid country name.");
+               $(".error").text("Error!"); // You don't want to see this
+          }
      })
-     
+     // Change input to start with Capital letter
+     function formatString(str) {
+          return str
+            .replace(/(\B)[^ ]*/g, match => (match.toLowerCase()))
+            .replace(/(^\w{1})|(\s+\w{1})/g, match => (match.toUpperCase()));
+        }
+
+     //Store data in localstorage
+     function storeList(){          
+               searches.push(inputValue);
+               window.localStorage.setItem("search", JSON.stringify(searches));
+               searchHistoryListEl.innerHTML = "";
+               historyListUpdate()             
+     }
+
      //Calendar
      function displayTime(){
           var reformatDate = dayjs().format('dddd, MMMM D');
@@ -63,9 +85,9 @@ $(document).ready(function(){
      //to get country data, currency code,currency name and counter check input with country name          
           
           exchangeInfo.innerHTML=""; //to make sure there is no data from previous search
-          if (input=="canada"){
+          if (input=="Canada"){
                compareCurrency = "USD";
-               compareName = "United State dollar";
+               compareName = "United States dollar";
           }
 
           var country= "https://restcountries.com/v3.1/name/"+input+"?fullText=true"; //API link to get country information
@@ -73,7 +95,6 @@ $(document).ready(function(){
                     .then(function(response){
                          if(response.ok){
                               response.json().then(function(data){
-                                   console.log(data);//JSON data to show in console
                                    capitalName = data[0].capital[0]; // Result of Capital Name <----result to link weather
                                    $('#capital-name').text("Capital City: "+capitalName);
                                    latitude = data[0].capitalInfo.latlng[0];                                   
@@ -86,21 +107,17 @@ $(document).ready(function(){
 
                                    currencyExchange();
                                    wikipediaBlurb(input);// <-----link to wikipedia function
-                                   // <----- can place weather function link here
+                                   $("#today-weather").text("Loading....");// <----- can place weather function link here
                                    initMap();
                               })
-                         } else {
-                              $('#country-name').attr("style","font-size:20px");
-                              $('#country-name').text("Please enter correct country name. Thanks.");
-                              }      
+                         }    
                     })
                     .catch(error => console.log('error', error)); 
      }    
 
      // CURRENCY EXCHANGE RATE
      function currencyExchange(){          
-     // new exchange link   
-          var key = "9d764e23d7588b589becfa68e6021ab75a789334";
+          var key = "e850a848ce4d55bbbfb07844e6e8f9c7af75429a";
 
           const url1 =  "https://api.getgeoapi.com/v2/currency/convert?api_key="+key+"&from="+compareCurrency+"&to="+currencyCode+"&amount=1&format=json"
           fetch(url1)
@@ -117,16 +134,15 @@ $(document).ready(function(){
                          showResult.textContent=" Sorry, daily limit had used up. ";
                          exchangeInfo.appendChild(showResult);
                     }
-               })
-          
-               const url2 =  "https://api.getgeoapi.com/v2/currency/convert?api_key="+key+"&from="+currencyCode+"&to="+compareCurrency+"&amount=1&format=json"
+                    const url2 =  "https://api.getgeoapi.com/v2/currency/convert?api_key="+key+"&from="+currencyCode+"&to="+compareCurrency+"&amount=1&format=json"
 
-               $.getJSON(url2, function (data) {
-                    var resultLocalUsd = (Object.values(data.rates))[0].rate;
-                    var showResult = document.createElement("p");
-                    showResult.textContent="1 "+compareName+" = "+resultLocalUsd+" "+currencyName;
-                    exchangeInfo.appendChild(showResult);
-               });                   
+                    $.getJSON(url2, function (data) {
+                         var resultLocalUsd = (Object.values(data.rates))[0].rate;
+                         var showResult = document.createElement("p");
+                         showResult.textContent="1 "+compareName+" = "+resultLocalUsd+" "+currencyName;
+                         exchangeInfo.appendChild(showResult);
+                    });  
+               })       
      }
      // END OF CURRENCY EXCHANGE RATE
 
@@ -135,17 +151,16 @@ $(document).ready(function(){
           var wikiUrl = "https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&prop=extracts&exintro&explaintext&exsentences=5&titles="+input;
           var wikiInfo = document.querySelector('#history');
           wikiInfo.innerHTML=""; //to make sure there is no data from previous search
-
           fetch(wikiUrl)
                .then(function(response){
                     if(response.ok){
                          response.json().then(function(data){
-                              console.log(data);//JSON data to show in console
+                              // console.log(data);//JSON data to show in console
                               var page = data.query.pages;
                               var pageId = Object.keys(page)[0];
                               var blurb = page[pageId].extract;
                               $('#country-name').text(page[pageId].title);//Format country name to formal
-                              console.log(blurb);
+                              // console.log(blurb);
                               var showResult = document.createElement("p");
                               showResult.textContent=blurb;
                               wikiInfo.appendChild(showResult);
@@ -165,12 +180,19 @@ $(document).ready(function(){
      function initMap() {
      map = new google.maps.Map(document.getElementById('map'), {
           center: {lat:latitude, lng:longtitude},
-          zoom: 6
+          zoom: 8
           });
      }
      // END OF MAP
-     // on window load, call country data of last search or default country
-     window.onload = searches[4]? callCountryData(searches[4]):callCountryData("canada"); // <---- default country to load, keep commented unless testing or deploying to avoid API call limit
+
+
+     //clear search history
+     $(".clearBtn").on("click",function(){
+          localStorage.clear();
+          location.reload();
+     })
+     
+     window.onload = callCountryData("Canada"); // <---- default country to load, keep commented unless testing or deploying to avoid API call limit
 })
 
      //The weather widget
@@ -205,7 +227,7 @@ displayWeather: function(data){
      document.body.style.backgroundImage = "url('https://source.unsplash.com/1600x1600/?" + name + "')" // Adding a background to a body element
 },
 search: function () {
-     this.fetchWeather(document.querySelector(".search-bar").value);
+     // this.fetchWeather(document.querySelector(".search-bar").value);
 }
 }
       
