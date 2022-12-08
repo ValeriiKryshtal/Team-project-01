@@ -107,7 +107,7 @@ $(document).ready(function(){
 
                                    currencyExchange();
                                    wikipediaBlurb(input);// <-----link to wikipedia function
-                                   $("#today-weather").text("Loading....");// <----- can place weather function link here
+                                   weather.fetchWeather(capitalName);// <----- can place weather function link here
                                    initMap();
                               })
                          }    
@@ -198,13 +198,13 @@ $(document).ready(function(){
      //The weather widget
 let weather = {
      "apiKey": "40cd60c50feeb35b6cb5749e49f6c7bf", 
-     fetchWeather: function(city,country){
-          fetch("https://api.openweathermap.org/data/2.5/forecast?q=" //API link to get country information
+     fetchWeather: function(city){
+          fetch("https://api.openweathermap.org/data/2.5/weather?q=" //API link to get country information
                + city 
-               + ","
-               + country
-               + "&units=metric&appid=" 
+               + "&appid="
                + this.apiKey
+               + "&units=imperial"
+              
           )
                .then((response) => response.json())
                .then((data) => this.displayWeather(data))
@@ -213,12 +213,12 @@ displayWeather: function(data){
       
      console.log(data);           
               
-     const { name } = data.city; // the cities name to weather
-     const { icon, description } = data.list[0].weather[0]; //JSON data for icon & description
-     const { temp, humidity } = data.list[0].main; //JSON data for temp & humidity
-     const { speed } = data.list[0].wind; //JSON data for winds speed
-     console.log(name,icon,description,temp,humidity,speed); 
-     document.querySelector(".capital-name").innerText = "Weather in " + name; // add data to the markup
+     // const { name } = data.city; // the cities name to weather
+     const { icon, description } = data.weather[0]; //JSON data for icon & description
+     const { temp, humidity } = data.main; //JSON data for temp & humidity
+     const { speed } = data.wind; //JSON data for winds speed
+     console.log(icon,description,temp,humidity,speed); 
+     // document.querySelector(".capital-name").innerText = "Weather in " + name; // add data to the markup
      document.querySelector(".icon").src = "https://openweathermap.org/img/wn/" + icon + "@2x.png";
      document.querySelector(".description").innerText = description;
      document.querySelector(".temp").innerText = temp + "°C";
@@ -226,9 +226,8 @@ displayWeather: function(data){
      document.querySelector(".wind").innerText = "Wind speed: " + speed +  " km/h";
      document.body.style.backgroundImage = "url('https://source.unsplash.com/1600x1600/?" + name + "')" // Adding a background to a body element
 },
-search: function () {
-     // this.fetchWeather(document.querySelector(".search-bar").value);
-}
+// search: function () {
+//      this.fetchWeather(document.querySelector(".search-bar").value);
+// }
 }
       
-weather.fetchWeather("Ottawa", "CA");
