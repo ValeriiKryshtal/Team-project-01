@@ -95,6 +95,7 @@ body {
      justify-content: center;
      font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
      width: 100%;
+     color: white;
      /* border: 5px solid darkred;  */
      /* text-align: justify; */
      
@@ -134,6 +135,7 @@ body {
 footer {
      text-align: center;
      font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+     color: white;
      margin: 5%;
 }
 .capital-name {
