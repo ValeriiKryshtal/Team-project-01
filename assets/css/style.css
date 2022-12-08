@@ -52,11 +52,34 @@ body {
      width:100%;
      border-radius: 7px;
 }
+
+.clearBtn{
+     display:none;
+     margin-top: 5px;
+     width: 100%;
+     border-radius: 7px;
+     border: 1px solid rgba(109, 199, 194, 0.904); 
+     background-color: rgba(154, 247, 242, 0.904);
+     text-align: center;
+     text-transform: uppercase;
+     color:#555;
+     font-size:11px;
+     font-weight:bold;
+}
+
+#submit-btn:hover,
+.clearBtn:hover{
+     cursor:pointer;
+     background-color: rgba(11, 167, 71, 0.904);
+}
 #submit-btn {
      margin-top: 5px;
      width: 100%;
      border-radius: 7px;
+     border: 1px solid rgba(109, 199, 194, 0.904); 
+     background-color: rgba(154, 247, 242, 0.904);     
 }
+
 #main-container {
      width: auto;
      display: flex;
@@ -127,10 +150,6 @@ footer {
      border-radius: 7px;
      margin: 1%;
      padding: 2%;
-}
-#submit-btn {
-     border: 1px solid rgba(109, 199, 194, 0.904); 
-     background-color: rgba(154, 247, 242, 0.904);
 }
 
 /* When screen is too small, content shuffles under search */

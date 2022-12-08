@@ -1,8 +1,16 @@
 $(document).ready(function(){
      const searches = JSON.parse(window.localStorage.getItem("search")) || [];
+
      var searchHistoryListEl=document.querySelector('#previos-search');
 
      function historyListUpdate() {
+          
+          if (searches.length!==0){
+               $('.clearBtn').attr("style","display:block");
+          } 
+          else if (searches.length===0){
+               $('.clearBtn').attr("style","display:none");
+          }
           for (let i =0; i<searches.length; i++){
                searches.length > 5? searches.shift() : searches;// if there are more than 5 searches, remove the oldest one
 
@@ -147,7 +155,7 @@ $(document).ready(function(){
                .then(function(response){
                     if(response.ok){
                          response.json().then(function(data){
-                              console.log(data);//JSON data to show in console
+                              // console.log(data);//JSON data to show in console
                               var page = data.query.pages;
                               var pageId = Object.keys(page)[0];
                               var blurb = page[pageId].extract;
@@ -172,10 +180,17 @@ $(document).ready(function(){
      function initMap() {
      map = new google.maps.Map(document.getElementById('map'), {
           center: {lat:latitude, lng:longtitude},
-          zoom: 8
+          zoom: 10
           });
      }
      // END OF MAP
+
+     //clear search history
+     $(".clearBtn").on("click",function(){
+          localStorage.clear();
+          location.reload();
+     })
+
      // on window load, call country data of last search or default country
      window.onload = searches[4]? callCountryData(searches[4]):callCountryData("Canada"); // <---- default country to load, keep commented unless testing or deploying to avoid API call limit
 })
